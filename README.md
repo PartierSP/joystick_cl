@@ -2,7 +2,21 @@
 
 A minimal C++ object-oriented API onto joystick devices under Linux.
 
-# usage
+# Build
+
+```bash
+mkdir build
+cmake ..
+make
+```
+
+or
+
+```bash
+g++ joystick_demo.cc joystick.cc -std=c++0x -Wall -o test
+```
+
+# Usage
 
 Create an instance of `Joystick`:
 
@@ -30,7 +44,7 @@ if (joystick.sample(&event))
 }
 ```
 
-# example
+# Example
 
 You might run this in a loop:
 
@@ -65,7 +79,7 @@ This produces something similar to:
     Axis 2 is at position 9796
     Axis 3 is at position -13850
 
-# options
+# Options
 
 You can specify the particular joystick by id:
 
@@ -80,7 +94,7 @@ Or provide a specific device name:
 Joystick js0("/dev/input/js0");
 ```
 
-# license
+# License
 
 Released under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
