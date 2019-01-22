@@ -12,7 +12,8 @@
 //
 // Copyright Drew Noakes 2013-2016
 
-#include "joystick.hh"
+#include <iostream>
+#include "joystick.h"
 #include <unistd.h>
 
 int main(int argc, char** argv)
@@ -36,16 +37,20 @@ int main(int argc, char** argv)
     JoystickEvent event;
     if (joystick.sample(&event))
     {
-      if (event.isButton())
-      {
-        printf("Button %u is %s\n",
-          event.number,
-          event.value == 0 ? "up" : "down");
-      }
-      else if (event.isAxis())
-      {
-        printf("Axis %u is at position %d\n", event.number, event.value);
-      }
+        std::cout << "[isInitialState?" << event.isInitialState() << "] ";
+        std:: cout << " t=" << event.time;
+        if (event.isButton())
+        {
+            std::cout << " Button#" << (int)event.number ;
+            std::cout << " value=" << ((event.value == 0) ? "up" : "down") ;
+            std::cout << std::endl;
+        }
+        else if (event.isAxis())
+        {
+            std::cout << "Axis#" << (int)event.number;
+            std::cout << " value=" << (int)event.value;
+            std::cout << std::endl;
+        }
     }
   }
 }

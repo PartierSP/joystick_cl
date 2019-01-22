@@ -12,7 +12,7 @@
 //
 // Copyright Drew Noakes 2013-2016
 
-#include "joystick.hh"
+#include "joystick.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -52,7 +52,7 @@ void Joystick::openPath(std::string devicePath, bool blocking)
 
 bool Joystick::sample(JoystickEvent* event)
 {
-  int bytes = read(_fd, event, sizeof(*event)); 
+  int bytes = read(_fd, event, sizeof(*event));
 
   if (bytes == -1)
     return false;
@@ -79,5 +79,3 @@ std::ostream& operator<<(std::ostream& os, const JoystickEvent& e)
      << " value=" << static_cast<int>(e.value);
   return os;
 }
-
-
