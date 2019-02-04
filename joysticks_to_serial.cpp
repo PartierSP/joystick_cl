@@ -49,7 +49,7 @@ void joystick_reader( Joystick* joystick )
               if( m1_val_new != m1_val ) {
                 m1_val = m1_val_new;
                 has_changed = true;
-                cout << "m1 has changed, ie. axis0\n";
+                cout << "m1 has changed, ie. axis0 to " << m1_val << endl;
               }
 
             }
@@ -59,7 +59,7 @@ void joystick_reader( Joystick* joystick )
               if( m2_val_new != m2_val ) {
                 m2_val = m2_val_new;
                 has_changed = true;
-                cout << "m2 has changed, ie. axis1\n";
+                cout << "m2 has changed, ie. axis1 to " << m2_val << endl;
               }
             }
 
@@ -68,7 +68,7 @@ void joystick_reader( Joystick* joystick )
               if( m3_val_new != m3_val ) {
                 m3_val = m3_val_new;
                 has_changed = true;
-                cout << "m3 has changed, ie. axis2\n";
+                cout << "m3 has changed, ie. axis2 to " << m3_val << endl;
               }
             }
 
@@ -77,7 +77,7 @@ void joystick_reader( Joystick* joystick )
               if( m4_val_new != m4_val ) {
                 m4_val = m4_val_new;
                 has_changed = true;
-                cout << "m4 has changed, ie. axis3\n";
+                cout << "m4 has changed, ie. axis3 to " << m4_val << endl;
               }
             }
         }
@@ -118,6 +118,7 @@ int main( )
   has_changed = true;
   while( is_ok ) {
     // if( has_changed) {
+    cout<<"#"<<m1_val<<":" << m2_val << ":" << m3_val << ":" << m4_val << "$" << endl;
     serial<<"#"<<m1_val<<":" << m2_val << ":" << m3_val << ":" << m4_val << "$" << endl;
     // has_changed = false;
     // }
