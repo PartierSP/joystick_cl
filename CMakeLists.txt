@@ -12,8 +12,13 @@ add_executable( joystick_demo joystick_demo.cc joystick.cc )
 # Demo of Serial Communication
 add_executable(serial_communication_demo serial_communication_demo.cc serialstream.cpp )
 
+# Uses Joystick data and sends it to Serial
+add_executable(joysticks_to_serial joysticks_to_serial.cpp joystick.cc serialstream.cpp )
+
 
 # Linking
 target_link_libraries( joystick_demo )
 
 target_link_libraries(serial_communication_demo ${Boost_LIBRARIES}  ${CMAKE_THREAD_LIBS_INIT})
+
+target_link_libraries(joysticks_to_serial ${Boost_LIBRARIES}  ${CMAKE_THREAD_LIBS_INIT})

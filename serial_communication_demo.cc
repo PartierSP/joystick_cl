@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     //options.setCsize(7);
     SerialStream serial(options);
     serial.exceptions(ios::badbit | ios::failbit); //Important!
-    serial<<"2000:1200:1200:1200$"<<endl;
+    serial<<"#2000:1200:1200:1200$"<<endl;
     try {
         string s;
         //serial>>s;
