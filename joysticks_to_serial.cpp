@@ -18,6 +18,10 @@ atomic<int> m3_val;
 atomic<int> m4_val;
 atomic<bool> has_changed;
 
+// #define JOYSTICK_AXIS_MIN -32767
+#define JOYSTICK_AXIS_MIN 0
+#define JOYSTICK_AXIS_MAX 32767
+
 void joystick_reader( Joystick* joystick )
 {
   while( is_ok ) {
@@ -35,6 +39,15 @@ void joystick_reader( Joystick* joystick )
               is_ok = false;
               cout << "[joystick_reader] quit button is pressed\n";
             }
+
+            if( (int)event.number==1 && event.value==0 && event.isInitialState() ==false ) {
+              m1_val = 1000;
+              m2_val = 1000;
+              m3_val = 1000;
+              m4_val = 1000;
+              has_changed = true;
+              cout << "[joystick_reader] quit button is pressed\n";
+            }
             std::cout << std::endl;
         }
         else if (event.isAxis())
@@ -43,9 +56,12 @@ void joystick_reader( Joystick* joystick )
             std::cout << " value=" << (int)event.value;
             std::cout << std::endl;
 
+            if( event.value < 0 )
+              continue;
+
             // convert [-32000,32000] --> [1000,2000]
             if( (int)event.number == 0 ) {
-              int m1_val_new =  1000 + 1000.0 * ( (float)event.value + 32000. ) / (2*32000.) ;
+              int m1_val_new =  1000 + 1000.0 * ( (float)event.value - JOYSTICK_AXIS_MIN ) / ( JOYSTICK_AXIS_MAX - JOYSTICK_AXIS_MIN ) ;
               if( m1_val_new != m1_val ) {
                 m1_val = m1_val_new;
                 has_changed = true;
@@ -55,7 +71,7 @@ void joystick_reader( Joystick* joystick )
             }
 
             if( (int)event.number == 1 ) {
-              int m2_val_new =  1000 + 1000.0 * ( (float)event.value + 32000. ) / (2*32000.) ;
+              int m2_val_new =  1000 + 1000.0 * ( (float)event.value - JOYSTICK_AXIS_MIN ) / ( JOYSTICK_AXIS_MAX - JOYSTICK_AXIS_MIN ) ;
               if( m2_val_new != m2_val ) {
                 m2_val = m2_val_new;
                 has_changed = true;
@@ -64,7 +80,7 @@ void joystick_reader( Joystick* joystick )
             }
 
             if( (int)event.number == 2 ) {
-              int m3_val_new =  1000 + 1000.0 * ( (float)event.value + 32000. ) / (2*32000.) ;
+              int m3_val_new =  1000 + 1000.0 * ( (float)event.value - JOYSTICK_AXIS_MIN ) / ( JOYSTICK_AXIS_MAX - JOYSTICK_AXIS_MIN ) ;
               if( m3_val_new != m3_val ) {
                 m3_val = m3_val_new;
                 has_changed = true;
@@ -73,7 +89,7 @@ void joystick_reader( Joystick* joystick )
             }
 
             if( (int)event.number == 3 ) {
-              int m4_val_new =  1000 + 1000.0 * ( (float)event.value + 32000. ) / (2*32000.) ;
+              int m4_val_new =  1000 + 1000.0 * ( (float)event.value - JOYSTICK_AXIS_MIN ) / ( JOYSTICK_AXIS_MAX - JOYSTICK_AXIS_MIN ) ;
               if( m4_val_new != m4_val ) {
                 m4_val = m4_val_new;
                 has_changed = true;
@@ -104,7 +120,7 @@ int main( )
   SerialOptions options;
   options.setDevice("/dev/ttyUSB0");
   options.setBaudrate(9600);
-  options.setTimeout(seconds(3));
+  options.setTimeout(milliseconds(20));
 
   SerialStream serial(options);
   serial.exceptions(ios::badbit | ios::failbit); //Important!
@@ -117,11 +133,11 @@ int main( )
   m1_val = 1000; m2_val=1200; m2_val=1200; m2_val=1200;
   has_changed = true;
   while( is_ok ) {
-    // if( has_changed) {
+    if( has_changed) {
     cout<<"#"<<m1_val<<":" << m2_val << ":" << m3_val << ":" << m4_val << "$" << endl;
     serial<<"#"<<m1_val<<":" << m2_val << ":" << m3_val << ":" << m4_val << "$" << endl;
-    // has_changed = false;
-    // }
+    has_changed = false;
+    }
 
     try {
         string s;
@@ -130,10 +146,10 @@ int main( )
         cout<<s<<endl;
     } catch(TimeoutException&) {
         serial.clear(); //Don't forget to clear error flags after a timeout
-        cerr<<"Timeout occurred"<<endl;
+        // cerr<<"Nothing received for now..."<<endl;
     }
 
-    usleep(1000);
+    // usleep(1000);
   }
 
   th1.join();
