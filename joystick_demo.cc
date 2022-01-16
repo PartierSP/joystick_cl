@@ -37,18 +37,18 @@ int main(int argc, char** argv)
     JoystickEvent event;
     if (joystick.sample(&event))
     {
-        std::cout << "[isInitialState?" << event.isInitialState() << "] ";
-        std:: cout << " t=" << event.time;
+        std::cout << event.isInitialState();
+        std:: cout << "," << event.time;
         if (event.isButton())
         {
-            std::cout << " Button#" << (int)event.number ;
-            std::cout << " value=" << ((event.value == 0) ? "up" : "down") ;
+            std::cout << ",1," << (int)event.number ;
+            std::cout << "," << ((event.value == 0) ? "0" : "1") ;
             std::cout << std::endl;
         }
         else if (event.isAxis())
         {
-            std::cout << "Axis#" << (int)event.number;
-            std::cout << " value=" << (int)event.value;
+            std::cout << ",0," << (int)event.number;
+            std::cout << "," << (int)event.value;
             std::cout << std::endl;
         }
     }
